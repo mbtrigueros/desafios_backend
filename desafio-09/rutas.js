@@ -61,8 +61,14 @@ class Rutas{
     }
     funcionBorrar = (req, res) => {
         const { id } = req.params;
+        const producto = rutas.productos.find((producto) => producto.id == id);
+        if (producto){
         rutas.productos = rutas.productos.filter(producto => producto.id != id);
         res.send(`Se ha borrado exitosamente el producto`);
+        }
+        else {
+            res.send("Error: Producto no encontrado");
+        }
     }
 }
 
