@@ -49,7 +49,7 @@ app.use('/api', routerProductos);
 
 // // IMPORTO LAS RUTAS DESPUES DEL ROUTER 
 
-const { rutas } = require("./rutas");
+const { rutas, listaProductos } = require("./rutas");
 
 // // PROGRAMA
 
@@ -62,20 +62,16 @@ routerProductos.delete(rutas.borrar, rutas.funcionBorrar);
 
 // RUTA WEBSOCKET
 
-/* Ruta de prueba para websocket*/
 app.get('/websocket', (req,res) => {
     res.render('./layouts/websocket.hbs')
   });
   
-  /*Ruta de websocket */
   io.on('connection', (socket) => {
   
     console.log(`Usuario conectado ${socket.id}`);
   
-    /*Evento que emite al socket para construir la página */
     socket.emit('tabla productos', listaProductos);
   
-    /*Evento escuchar el servidor para agregar un producto al array */
     socket.on('agregar producto', (data) => {
   
       if (listaProductos.length == 0) {
@@ -83,11 +79,10 @@ app.get('/websocket', (req,res) => {
           data.title,
           data.price,
           data.thumbnail,
-          listaProducts.length + 1
+          listaProductos.length
         );
-        listsProducts.push(nuevoProducto);
+        listaProductos.push(nuevoProducto);
   
-        /*Una vez que lo agregar emite a TODOS los socket el nuevo elemento para reconstruir la página a partir de todos */
         io.emit('tabla productos', listaProductos);
     
       } else {
@@ -95,13 +90,12 @@ app.get('/websocket', (req,res) => {
           data.title,
           data.price,
           data.thumbnail,
-          listaProductos[listaProductos.length-1].id +1
+          listaProductos.length
         );
         listaProductos.push(nuevoProducto);
   
-         /*Una vez que lo agregar emite a TODOS los socket el nuevo elemento para reconstruir la página a partir de todos */
         io.emit('tabla productos', listaProductos);
-       }
+      }
     })
   
     socket.on('disconnect', () => {

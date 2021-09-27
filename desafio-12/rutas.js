@@ -86,4 +86,4 @@ class Rutas{
 }
 
 const rutas = new Rutas()
-module.exports = { rutas }
+module.exports = { rutas, listaProductos }
