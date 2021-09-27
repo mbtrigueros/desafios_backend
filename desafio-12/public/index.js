@@ -1,7 +1,7 @@
 const socket = io();
 
 /*Evento que escucha el cliente para construir la tabla de productos */
-socket.on('tabla productos', data => {
+socket.on('tabla productos', (data) => {
 
     console.log(data.length);
 
@@ -13,7 +13,7 @@ socket.on('tabla productos', data => {
     } else {
 
         const tBody = document.getElementById('tabla__body')
-        tBody.innerHTML = ``
+        tBody.innerHTML = ``;
         data.forEach(data => {
             tBody.innerHTML += `
             <tr id="tabla_row">
@@ -40,9 +40,9 @@ function agregarProducto(e) {
     // console.log(productoAgregado)
     socket.emit('agregar producto', productoAgregado);
     
-    document.getElementById('title').value = ""
-    document.getElementById('price').value = ""
-    document.getElementById('thumbnail').value = ""
+    document.getElementById('title').value = "";
+    document.getElementById('price').value = "";
+    document.getElementById('thumbnail').value = "";
 }
 
 const btnagregarProducto = document.getElementById('btn__agregarProducto').addEventListener('click', agregarProducto);

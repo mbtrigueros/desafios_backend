@@ -12,10 +12,12 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 
-const server = app.listen(PORT, ()=>{
-    console.log('Servidor HTTP escuchando en el puerto', server.address().port);
-});
-server.on('error', error=>console.log('Error en servidor', error));
+// const server = app.listen(PORT, ()=>{
+//     console.log('Servidor HTTP escuchando en el puerto', server.address().port);
+// });
+// server.on('error', error=>console.log('Error en servidor', error));
+
+http.listen(8080, () => console.log(`Servidor iniciado en puerto ${PORT}`));
 
 // HANDLEBARS
 
