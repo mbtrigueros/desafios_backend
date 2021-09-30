@@ -45,4 +45,35 @@ function agregarProducto(e) {
     document.getElementById('thumbnail').value = "";
 }
 
-const btnagregarProducto = document.getElementById('btn__agregarProducto').addEventListener('click', agregarProducto);
+// const btnagregarProducto = document.getElementById("btn__agregarProducto").addEventListener('click', agregarProducto);
+
+// evento mensajes
+
+socket.on('mensajes', (data)=>{
+    render(data);
+});
+
+let render = (data) => {
+    let html = 
+    data.map((m)=>`
+        <div class="fila">
+            <strong style= "color: blue">${m.mail}</strong>
+            <span style= "color: brown"> [ ${m.date} ] </span>
+            <em style= "color: green">: ${m.texto}</em>
+        </div>
+    `).join(' ');
+    document.getElementById('mensajes').innerHTML = html;
+}
+
+function envioMensaje(f){
+
+    let mail = document.getElementById('mail').value;
+    let date = new Date().toLocaleString();
+    let texto = document.getElementById('mensaje').value;
+    if(mail==="") {
+        alert('Ingrese un mail')
+    } else {
+        socket.emit('nuevo', {mail, date, texto});
+    }
+    return false;
+}

@@ -1,6 +1,6 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
-
+const fs = require('fs');
 // SERVER
 
 const app = express();
@@ -60,6 +60,11 @@ routerProductos.post(rutas.guardar, rutas.funcionGuardar);
 routerProductos.put(rutas.actualizar, rutas.funcionActualizar);
 routerProductos.delete(rutas.borrar, rutas.funcionBorrar);
 
+// MENSAJES
+
+const mensajes = [
+]
+
 // RUTA WEBSOCKET
 
 app.get('/websocket', (req,res) => {
@@ -69,7 +74,15 @@ app.get('/websocket', (req,res) => {
   io.on('connection', (socket) => {
   
     console.log(`Usuario conectado ${socket.id}`);
-  
+
+    socket.emit('mensajes', mensajes);
+    socket.on('nuevo',(data)=>{
+      mensajes.push(data);
+      fs.writeFileSync('chat-historial.txt', JSON.stringify(mensajes), 'utf-8');
+      io.sockets.emit('mensajes', mensajes);
+    });
+
+
     socket.emit('tabla productos', listaProductos);
   
     socket.on('agregar producto', (data) => {
@@ -96,10 +109,11 @@ app.get('/websocket', (req,res) => {
   
         io.emit('tabla productos', listaProductos);
       }
-    })
+
+    });
   
     socket.on('disconnect', () => {
       console.log(`El usuario ${socket.id} se desconectó`);
     });
   
-  })
+  });

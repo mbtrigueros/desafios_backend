@@ -1,4 +1,9 @@
+
 {
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+},
   "name": "desafio-12",
   "version": "1.0.0",
   "description": "",
