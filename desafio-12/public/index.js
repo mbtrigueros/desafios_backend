@@ -26,8 +26,7 @@ socket.on('tabla productos', (data) => {
     }
 })
 
-function agregarProducto(e) {
-    e.preventDefault();
+function agregarProducto(f) {
     let titleProducto = document.getElementById('title').value;
     let priceProducto = document.getElementById('price').value;
     let thumbnailProducto = document.getElementById('thumbnail').value;
@@ -43,6 +42,8 @@ function agregarProducto(e) {
     document.getElementById('title').value = "";
     document.getElementById('price').value = "";
     document.getElementById('thumbnail').value = "";
+
+    return false;
 }
 
 const btnagregarProducto = document.getElementById('btn__agregarProducto').addEventListener('click', agregarProducto);

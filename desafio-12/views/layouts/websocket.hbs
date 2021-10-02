@@ -11,7 +11,7 @@
 </head>
 <body>
 
-        <form method="POST" action="/api/productos/guardar" style="margin:20px;">
+        <form method="POST" action="/api/productos/guardar" style="margin:20px;" onsubmit="return agregarProducto(this)">
         <fieldset>
             <legend>Agregar Productos</legend>
             Title:<input name="title" id="title" type="text">

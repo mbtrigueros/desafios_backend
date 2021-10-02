@@ -49,7 +49,9 @@ app.use('/api', routerProductos);
 
 // // IMPORTO LAS RUTAS DESPUES DEL ROUTER 
 
+const { Producto } = require("./productos");
 const { rutas, listaProductos } = require("./rutas");
+
 
 // // PROGRAMA
 
@@ -82,8 +84,7 @@ app.get('/websocket', (req,res) => {
           listaProductos.length
         );
         listaProductos.push(nuevoProducto);
-  
-        io.emit('tabla productos', listaProductos);
+        io.sockets.emit('tabla productos', listaProductos);
     
       } else {
         let nuevoProducto = new Producto(
@@ -93,8 +94,7 @@ app.get('/websocket', (req,res) => {
           listaProductos.length
         );
         listaProductos.push(nuevoProducto);
-  
-        io.emit('tabla productos', listaProductos);
+        io.sockets.emit('tabla productos', listaProductos); 
       }
     })
   
