@@ -1,55 +1,59 @@
-const express = require('express');
-const handlebars = require('express-handlebars');
-const fs = require('fs');
+'use strict';
+
+var express = require('express');
+var handlebars = require('express-handlebars');
+var fs = require('fs');
 // SERVER
 
-const app = express();
-const PORT = 8080;
+var app = express();
+var PORT = 8080;
 
 // HTTP Y SOCKET
 
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 // const server = app.listen(PORT, ()=>{
 //     console.log('Servidor HTTP escuchando en el puerto', server.address().port);
 // });
 // server.on('error', error=>console.log('Error en servidor', error));
 
-http.listen(8080, () => console.log(`Servidor iniciado en puerto ${PORT}`));
+http.listen(8080, function () {
+  return console.log('Servidor iniciado en puerto ' + PORT);
+});
 
 // HANDLEBARS
 
-app.engine(
-    "hbs",
-    handlebars({
-        extname: ".hbs",
-        defaultLayout: "websocket.hbs",
-        layoutsDir: "./views/layouts",
-        partialsDir: "./views/partials"
-    })
-);
+app.engine("hbs", handlebars({
+  extname: ".hbs",
+  defaultLayout: "websocket.hbs",
+  layoutsDir: "./views/layouts",
+  partialsDir: "./views/partials"
+}));
 
 app.set('views', './views'); // especifica el directorio de vistas
 app.set('view engine', 'hbs'); // registra el motor de plantillas
 app.use(express.static('./public'));
 
-
 // // ROUTER 
 
-const routerProductos = express.Router();
+var routerProductos = express.Router();
 
 // // MIDDLEWARES
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', routerProductos);
 
 // // IMPORTO LAS RUTAS DESPUES DEL ROUTER 
 
-const { rutas, listaProductos } = require("./rutas");
+var _require = require("./productos"),
+    Producto = _require.Producto;
+
+var _require2 = require("./rutas"),
+    rutas = _require2.rutas,
+    listaProductos = _require2.listaProductos;
 
 // // PROGRAMA
 
@@ -62,58 +66,43 @@ routerProductos.delete(rutas.borrar, rutas.funcionBorrar);
 
 // MENSAJES
 
-const mensajes = [
-]
+var mensajes = [];
 
 // RUTA WEBSOCKET
 
-app.get('/websocket', (req,res) => {
-    res.render('./layouts/websocket.hbs')
+app.get('/websocket', function (req, res) {
+  res.render('./layouts/websocket.hbs');
+});
+
+io.on('connection', function (socket) {
+
+  console.log('Usuario conectado ' + socket.id);
+
+  socket.emit('mensajes', mensajes);
+  socket.on('nuevo', function (data) {
+    mensajes.push(data);
+    fs.writeFileSync('chat-historial.txt', JSON.stringify(mensajes), 'utf-8');
+    io.sockets.emit('mensajes', mensajes);
   });
-  
-  io.on('connection', (socket) => {
-  
-    console.log(`Usuario conectado ${socket.id}`);
 
-    socket.emit('mensajes', mensajes);
-    socket.on('nuevo',(data)=>{
-      mensajes.push(data);
-      fs.writeFileSync('chat-historial.txt', JSON.stringify(mensajes), 'utf-8');
-      io.sockets.emit('mensajes', mensajes);
-    });
+  socket.emit('tabla productos', listaProductos);
 
+  socket.on('agregar producto', function (data) {
 
-    socket.emit('tabla productos', listaProductos);
-  
-    socket.on('agregar producto', (data) => {
-  
-      if (listaProductos.length == 0) {
-        let nuevoProducto = new Product(
-          data.title,
-          data.price,
-          data.thumbnail,
-          listaProductos.length
-        );
-        listaProductos.push(nuevoProducto);
-  
-        io.emit('tabla productos', listaProductos);
-    
-      } else {
-        let nuevoProducto = new Producto(
-          data.title,
-          data.price,
-          data.thumbnail,
-          listaProductos.length
-        );
-        listaProductos.push(nuevoProducto);
-  
-        io.emit('tabla productos', listaProductos);
-      }
+    if (listaProductos.length == 0) {
+      var nuevoProducto = new Producto(data.title, data.price, data.thumbnail, listaProductos.length);
+      listaProductos.push(nuevoProducto);
 
-    });
-  
-    socket.on('disconnect', () => {
-      console.log(`El usuario ${socket.id} se desconectó`);
-    });
-  
+      io.sockets.emit('tabla productos', listaProductos);
+    } else {
+      var _nuevoProducto = new Producto(data.title, data.price, data.thumbnail, listaProductos.length);
+      listaProductos.push(_nuevoProducto);
+
+      io.sockets.emit('tabla productos', listaProductos);
+    }
   });
+
+  socket.on('disconnect', function () {
+    console.log('El usuario ' + socket.id + ' se desconect\xF3');
+  });
+});
