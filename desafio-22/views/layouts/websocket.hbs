@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi APP</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/index.js"></script>
+</head>
+<body>
+
+        <form method="POST" action="/api/productos/guardar" style="margin:20px;">
+        <fieldset>
+            <legend>Agregar Productos</legend>
+            Title:<input name="title" id="title" type="text">
+            Price:<input name="price" id="price" type="number">
+            Thumbnail:<input name="thumbnail" id="thumbnail" type="text">
+        </fieldset>    
+        <button id="btn__agregarProducto" type="submit">Agregar producto</button>
+    </form>
+
+    {{>lista}}
+    {{>mensajes}}
+
+
+</body>
+</html>
