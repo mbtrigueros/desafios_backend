@@ -7,7 +7,7 @@ exports.getConnection = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
-        return `Connection success to mongodb://localhost:27017/mongoDBlocal`
+        return console.log('Te conectaste correctamente a MongoDb');
 
     } catch (error) {
         return `Connection Failed! Error => ${error}`

@@ -11,7 +11,7 @@ const MensajesSchema = new Schema({
         avatar: {type: String, required: true},
     },
     text: {type: String, required: true, max: 255},
-    date: { type: Date, default: Date.now }
+    date: { type: String}
 })
 
 const modeloMensaje = model(mensajesCollection, MensajesSchema);

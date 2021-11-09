@@ -1,11 +1,10 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
 const fs = require('fs');
+
 const { getConnection } = require('./db/mongoDB.js');
 
-const { SelectMensajes } = require('./services/mensajes-normalizer.js');
-
-const Mensaje = require("../models/mensajes.js");
+const Mensaje = require("./models/mensajes.js");
 
 // SERVER
 
@@ -17,11 +16,6 @@ const PORT = 8080;
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-
-// const server = app.listen(PORT, ()=>{
-//     console.log('Servidor HTTP escuchando en el puerto', server.address().port);
-// });
-// server.on('error', error=>console.log('Error en servidor', error));
 
 http.listen(8080, () => console.log(`Servidor iniciado en puerto ${PORT}`));
 
@@ -55,33 +49,10 @@ getConnection();
 
 app.get('/websocket', (req,res) => {
     res.render('./layouts/websocket.hbs')
+    const socketConnection = require ('./services/mensajes-normalizer.js');
+    socketConnection(io);
     });
 
-    io.on('connection', (socket) => {
-
-    console.log(`Usuario conectado ${socket.id}`);
-
-    SelectMensajes();
-
-    });
-
-    socket.on('mensajeNuevo', newMsj => {
-        Mensaje.create(newMsj)
-            .then(() => {
-                console.log('Mensaje insertado');
-                SelectMensajes();
-                return false;
-            })
-            .catch(e => {
-                console.log('Error en Insert message: ', e);
-            });
-
-    });
-    
-    socket.on('disconnect', () => {
-        console.log(`El usuario ${socket.id} se desconectó`);
-    });
-    
 
 
 

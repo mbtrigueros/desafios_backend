@@ -3,34 +3,36 @@ console.log('Index.js funcionando');
 
 // evento mensajes
 
-socket.on('mensajes', (data)=>{
-    console.log(data);
+socket.on('mensajes', (data) => renderMensajes(data));
 
-    console.log('Se ejecutó "list-msg-chat"')
+let renderMensajes = (data) => {
 
-    if(data.length <= 0) {
+    console.log('Entro historial de mensajes')
+
+    if(data.mensajes.length <= 0) {
         console.log('No hay mensajes de chat')
         const boardChat = document.getElementById('mensajes');
-        boardChat.innerHTML = `<h6> No hay mensajes de chat </h6>`;
+        boardChat.innerHTML = `<h4> No hay mensajes de chat </h4>`;
     }
     else {
-    console.log(data);
     let html = 
-    data.map((m)=>`
+    data.mensajes.map((m)=>`
         <div class="fila">
-            <img src="${e.author.avatar}" alt="" width="60" height="60">
-            <strong style= "color: blue">${m.mail}</strong>
+            <strong style= "color: blue">${m.author.alias}</strong>
             <span style= "color: brown"> [ ${m.date} ] </span>
-            <em style= "color: green">: ${m.texto}</em>
+            <em style= "color: green">: ${m.text}</em>
+            <img src="${m.author.avatar}" alt="" width="60" height="60">
         </div>
     `).join(' ');
     document.getElementById('mensajes').innerHTML = html;
+    document.getElementById('porcentaje').innerHTML = `<h3>${data.compresion}%</h3>`;
 }
-    })
+
+}
 
 function envioMensaje(f){
 
-    console.log('Funcion envioMensaje')
+    console.log('Funcion envioMensaje esta funcionando')
 
     let mensaje = {
         author: {
@@ -41,7 +43,7 @@ function envioMensaje(f){
             alias: document.getElementById('alias').value,
             avatar: document.getElementById('avatar').value,
         },
-        text: document.getElementById('mensaje').value,
+        text: document.getElementById('text').value,
         date: new Date().toLocaleString()
     }
 
@@ -52,3 +54,4 @@ function envioMensaje(f){
     return false;
 
 }
+
