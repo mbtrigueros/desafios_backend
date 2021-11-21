@@ -1,0 +1,31 @@
+{
+  "name": "desafio-25",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "connect-mongo": "^4.6.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.4",
+    "express-session": "^1.17.2",
+    "faker": "^5.5.3",
+    "firebase-admin": "^10.0.0",
+    "handlebars": "^4.7.7",
+    "jsdom": "^18.0.1",
+    "knex": "^0.95.11",
+    "mongoose": "^6.0.12",
+    "mongoose-type-email": "^1.1.2",
+    "mysql": "^2.18.1",
+    "normalizr": "^3.6.1",
+    "socket.io": "^4.3.1",
+    "sqlite3": "^5.0.2",
+    "uuid": "^3.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}
