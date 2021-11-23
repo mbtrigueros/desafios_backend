@@ -1,0 +1,24 @@
+{{#if userName}}
+
+{{>welcome}}
+{{>mensajes}}
+
+{{else}}
+
+<h2>Iniciar sesion</h2>
+
+<form action="/usuario/login" method="POST" name="login">
+
+<input type="text" id="userName" name="userName" aria-describedby="userName"
+                        placeholder="Ingrese su Email">
+
+<input type="password" id="password" name="password" aria-describedby="password"
+                    placeholder="Ingrese su contraseña">
+
+<button id="btn-login" type="submit" style="margin:1.5em;">Login</button>
+
+<a href="/usuario/register"><button id="btn-register" type="button" style="margin:1.5em;">Registrarme</button></a>
+
+{{/if}}
+
+</form>
