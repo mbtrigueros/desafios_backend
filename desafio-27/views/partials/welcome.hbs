@@ -1,0 +1,13 @@
+<div class="col-1">
+    <img src="{{data.user.picture}}" alt="" width="100" height="100">
+</div>
+
+<h2>¡Bienvenidx <strong>{{data.user.userName}}</strong>!</h2>
+<h3>Tu mail: {{data.user.email}}</h3>
+
+<form action="/usuario/logout" name="logout" method="GET">
+                <button type="submit"  style="margin:1.5em;" onsubmit="return false">
+                    Logout</button>
+            </form>
+
+
